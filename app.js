@@ -1,22 +1,16 @@
-const express = require('express')
-const app = express()
+//configurando variables de entorno
+require('dotenv').config()
+
+
+//importo el servidor modelo
+const ServidorModelo=require("./models/ServidorModelo.js")
+
+//crear un objeto de la clase servidormodelo
+const servidorFPC=new ServidorModelo()
+
+//despertar el servidor
+servidorFPC.despertarServidor()
+
  
-app.get('/avanzada/v1/jugadores', function (req, res) {
-  res.send('Hello World')
-})
 
-app.post('/avanzada/v1/jugadores', function (req, res) {
-    res.send('Hello World')
-})
-
-app.put('/avanzada/v1/jugadores', function (req, res) {
-    res.send('Hello World')
-})
-
-app.delete('/avanzada/v1/jugadores', function (req, res) {
-    res.send('Hello World')
-})
  
-app.listen(3000,function(){
-    console.log("servidor encendido")
-})
