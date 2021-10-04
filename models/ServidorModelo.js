@@ -1,46 +1,52 @@
 const express = require('express')
 
+//IMPORTAR LA FUNCION PARA CONECTARME CON LA BD
+const { conectarBD } = require('../database/conexion.js')
+
 class ServidorModelo {
 
-    constructor(){
+    constructor() {
 
-        this.app = express()
-        this.enrutarPeticiones()
+        this.app = express();
+        this.despertarBD();
+        this.enrutarPeticiones();
 
     }
 
-    despertarServidor(){
+    despertarServidor() {
 
-        this.app.listen(process.env.PUERTO,function(){
-            console.log("servidor encendido "+process.env.PUERTO)
+        this.app.listen(process.env.PUERTO, function () {
+            console.log("servidor encendido " + process.env.PUERTO)
         })
 
     }
 
-    enrutarPeticiones(){
+    enrutarPeticiones() {
 
         this.app.get('/avanzada/v1/jugadores', function (req, res) {
             res.send('Hello World')
         })
-          
+
         this.app.post('/avanzada/v1/jugadores', function (req, res) {
             res.send('Hello World')
         })
-          
+
         this.app.put('/avanzada/v1/jugadores', function (req, res) {
             res.send('Hello World')
         })
-          
+
         this.app.delete('/avanzada/v1/jugadores', function (req, res) {
             res.send('Hello World')
         })
 
     }
 
-    despertarBD(){
+    despertarBD() {
+
+        conectarBD()
 
     }
 
 }
 
-module.exports=ServidorModelo
+module.exports = ServidorModelo
