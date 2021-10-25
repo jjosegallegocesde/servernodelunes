@@ -1,56 +1,132 @@
 //EL CONTROLADOR ES EL ENCARGADO
 //DE ADMINISTRAR LAS PETICIONES Y RESPUESTAS
 
+//IMPORTACIONES
 const { request, response } = require('express')
 
+const { insertarJugador } = require('../services/servicio.js')
+const { leerJugador } = require('../services/servicio.js')
+const { leerJugadores } = require('../services/servicio.js')
+const { borrarJugador } = require('../services/servicio.js')
+const { modificarJugador } = require('../services/servicio.js')
+
+
+
 //crear una funcion para cada operacion del servidor
+async function registrarJugador(peticion = request, respuesta = response) {
 
-function registrarJugador(peticion = request, respuesta = response) {
+    try {
 
-    let datosPeticion = peticion.body
+        let datosPeticion = peticion.body
 
-    respuesta.json({
-        mensaje: "estoy registrando un jugador"
-    })
+        await insertarJugador(datosPeticion)
+        respuesta.status(200).json({
+            estado: true,
+            mensaje: "Exito registrando el jugador"
+        })
 
-}
 
-function buscarJugador(peticion = request, respuesta = response) {
+    } catch (error) {
+        respuesta.status(400).json({
+            estado: false,
+            mensaje: "Upss... tenemos un problema: " + error
+        })
+    }
 
-    let id = peticion.params.id
-
-    respuesta.json({
-        mensaje: "estoybuscando un jugador"
-    })
-
-}
-
-function buscarJugadores(peticion = request, respuesta = response) {
-
-    respuesta.json({
-        mensaje: "estoy buscando todos los jugadores"
-    })
 
 }
 
-function editarJugador(peticion = request, respuesta = response) {
+async function buscarJugador(peticion = request, respuesta = response) {
 
-    let id = peticion.params.id
+    try {
 
-    respuesta.json({
-        mensaje: "estoy editando un jugador"
-    })
+        let id = peticion.params.id
+
+        let jugador = await leerJugador(id)
+
+        respuesta.status(200).json({
+            estado: true,
+            mensaje: jugador
+        })
+
+
+    } catch (error) {
+        respuesta.status(400).json({
+            estado: false,
+            mensaje: "Upss... tenemos un problema: " + error
+        })
+    }
 
 }
 
-function eliminarJugador(peticion = request, respuesta = response) {
+async function buscarJugadores(peticion = request, respuesta = response) {
 
-    let id = peticion.params.id
-    let datosPeticion = peticion.body
+    try {
 
-    respuesta.json({
-        mensaje: "estoy eliminando un jugador"
-    })
+        let jugadores = await leerJugadores()
+
+        respuesta.status(200).json({
+            estado: true,
+            mensaje: jugadores
+        })
+
+
+    } catch (error) {
+        respuesta.status(400).json({
+            estado: false,
+            mensaje: "Upss... tenemos un problema: " + error
+        })
+    }
+
+}
+
+async function editarJugador(peticion = request, respuesta = response) {
+
+
+    try {
+
+        let id = peticion.params.id
+        let datosPeticion = peticion.body
+
+        await modificarJugador(id, datosPeticion)
+
+        respuesta.status(200).json({
+            estado: true,
+            mensaje: "Exito editando el jugador"
+        })
+
+
+    } catch (error) {
+        respuesta.status(400).json({
+            estado: false,
+            mensaje: "Upss... tenemos un problema: " + error
+        })
+    }
+
+}
+
+async function eliminarJugador(peticion = request, respuesta = response) {
+
+    try {
+
+        let id = peticion.params.id
+
+        await borrarJugador(id)
+
+        respuesta.status(200).json({
+            estado: true,
+            mensaje: "Exito al sacar de la convocatoria al jugador"
+        })
+
+
+    } catch (error) {
+        respuesta.status(400).json({
+            estado: false,
+            mensaje: "Upss... tenemos un problema: " + error
+        })
+    }
+
+
 
 }
 
